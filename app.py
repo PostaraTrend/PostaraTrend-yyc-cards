@@ -15,7 +15,7 @@ with open(TEMPLATE_PATH, encoding="utf-8") as f:
     TEMPLATE = f.read()
 
 OUT = 1080          # final published square size
-SCALE = 2           # supersample factor, then downscale for crisp text
+SCALE = 1           # supersample factor, then downscale for crisp text
 DEFAULT_FOOTER = "Full report in comments \u00b7 yycrentalstudio.ca"
 try:
     TZ = ZoneInfo("America/Edmonton")
