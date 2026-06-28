@@ -1,7 +1,7 @@
 import io
 import os
 import html
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
 from flask import Flask, request, send_file, abort
@@ -17,7 +17,10 @@ with open(TEMPLATE_PATH, encoding="utf-8") as f:
 OUT = 1080          # final published square size
 SCALE = 2           # supersample factor, then downscale for crisp text
 DEFAULT_FOOTER = "Full report in comments \u00b7 yycrentalstudio.ca"
-TZ = ZoneInfo("America/Edmonton")
+try:
+    TZ = ZoneInfo("America/Edmonton")
+except Exception:
+    TZ = timezone(timedelta(hours=-6))
 
 
 def headline_size(text):
