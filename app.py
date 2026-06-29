@@ -14,8 +14,8 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), "templates", "yyc-news-c
 with open(TEMPLATE_PATH, encoding="utf-8") as f:
     TEMPLATE = f.read()
 
-OUT = 1080          # final published square size
-SCALE = 1           # render at 1080 directly (Starter-plan memory safe)
+OUT = 1080
+SCALE = 1
 DEFAULT_FOOTER = "Full report in comments \u00b7 yycrentalstudio.ca"
 try:
     TZ = ZoneInfo("America/Edmonton")
@@ -61,8 +61,12 @@ def render_png(html_str):
             device_scale_factor=SCALE,
         )
         page.set_default_timeout(45000)
-        page.set_content(html_str, wait_until="domcontentloaded")
-        el = page.wait_for_selector("#card", state="attached", timeout=20000)
+        page.set_content(html_str, wait_until="load")
+        el = page.query_selector("#card")
+        if el is None:
+            dom = page.content()
+            browser.close()
+            raise RuntimeError("CARD_NOT_FOUND::" + dom[:2000])
         try:
             page.evaluate("async () => { await document.fonts.ready; }")
         except Exception:
@@ -95,7 +99,11 @@ def dusk():
     if not date:
         now = datetime.now(TZ)
         date = now.strftime("%A \u00b7 %B ") + str(now.day)
-    png = render_png(build_html(headline, source, date, footer))
+    try:
+        png = render_png(build_html(headline, source, date, footer))
+    except Exception:
+        import traceback
+        return "<pre>" + html.escape(traceback.format_exc()) + "</pre>", 500
     return send_file(png, mimetype="image/png", download_name="yyc-card.png")
 
 
