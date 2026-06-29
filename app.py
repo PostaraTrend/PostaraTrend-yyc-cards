@@ -61,13 +61,13 @@ def render_png(html_str):
             device_scale_factor=SCALE,
         )
         page.set_default_timeout(45000)
-        page.set_content(html_str, wait_until="load")
+        page.set_content(html_str, wait_until="domcontentloaded")
+        el = page.wait_for_selector("#card", state="attached", timeout=20000)
         try:
             page.evaluate("async () => { await document.fonts.ready; }")
         except Exception:
             pass
-        page.wait_for_timeout(400)
-        el = page.query_selector("#card")
+        page.wait_for_timeout(500)
         raw = el.screenshot(type="png")
         browser.close()
     img = Image.open(io.BytesIO(raw)).convert("RGB")
