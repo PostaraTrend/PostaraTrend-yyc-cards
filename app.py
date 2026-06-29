@@ -15,7 +15,7 @@ with open(TEMPLATE_PATH, encoding="utf-8") as f:
     TEMPLATE = f.read()
 
 OUT = 1080          # final published square size
-SCALE = 1           # supersample factor, then downscale for crisp text
+SCALE = 1           # render at 1080 directly (Starter-plan memory safe)
 DEFAULT_FOOTER = "Full report in comments \u00b7 yycrentalstudio.ca"
 try:
     TZ = ZoneInfo("America/Edmonton")
@@ -47,13 +47,26 @@ def build_html(headline, source, date, footer):
 
 def render_png(html_str):
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
+        browser = p.chromium.launch(
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--single-process",
+                "--no-zygote",
+            ]
+        )
         page = browser.new_page(
             viewport={"width": OUT, "height": OUT},
             device_scale_factor=SCALE,
         )
-        page.set_content(html_str, wait_until="networkidle")
-        page.evaluate("async () => { await document.fonts.ready; }")
+        page.set_default_timeout(45000)
+        page.set_content(html_str, wait_until="load")
+        try:
+            page.evaluate("async () => { await document.fonts.ready; }")
+        except Exception:
+            pass
+        page.wait_for_timeout(400)
         el = page.query_selector("#card")
         raw = el.screenshot(type="png")
         browser.close()
