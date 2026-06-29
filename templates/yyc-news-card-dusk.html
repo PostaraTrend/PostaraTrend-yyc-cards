@@ -1,1 +1,69 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1080px;height:1080px;}
+  #card{
+    position:relative;width:1080px;height:1080px;overflow:hidden;
+    font-family:'Outfit',system-ui,sans-serif;
+    background:linear-gradient(180deg,
+      #0a1220 0%,#122036 34%,#20344e 56%,#46414f 70%,
+      #9c6238 80%,#d9933f 88%,#f0b257 94%,#c47e30 100%);
+  }
+  .glow-sun{
+    position:absolute;left:50%;top:82%;width:130%;height:34%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center,
+      rgba(245,190,110,0.55) 0%,rgba(217,147,63,0.18) 45%,transparent 70%);
+  }
+  .moon{
+    position:absolute;right:150px;top:150px;width:150px;height:150px;border-radius:50%;
+    background:#f6efdc;box-shadow:0 0 130px 44px rgba(246,239,220,0.35);
+  }
+  .mts{position:absolute;left:0;bottom:0;width:1080px;height:410px;}
+  .layer{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    padding:97px 86px 81px;text-align:center;
+  }
+  .eyebrow{
+    font-weight:600;font-size:25px;letter-spacing:4.5px;color:#d6a559;
+    display:flex;align-items:center;justify-content:center;gap:15px;text-transform:uppercase;
+  }
+  .sq{width:14px;height:14px;background:#d99a3f;display:inline-block;}
+  .date{
+    margin-top:17px;font-weight:500;font-size:22px;letter-spacing:3.6px;
+    color:#9fb0c4;text-transform:uppercase;
+  }
+  .mid{margin-top:140px;}
+  .headline{
+    font-weight:800;font-size:72px;line-height:1.05;color:#f7f3ea;letter-spacing:-0.5px;
+  }
+  .uline{width:140px;height:8px;background:#d99a3f;margin:48px auto 0;border-radius:1px;}
+  .source{
+    margin-top:40px;font-family:'Playfair Display',Georgia,serif;font-style:italic;
+    font-size:32px;color:#c7cedb;
+  }
+  .spacer{flex:1;}
+  .footer{
+    font-weight:600;font-size:21px;letter-spacing:3.2px;color:#d99a3f;text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+  <div id="card">
+    <div class="glow-sun"></div>
+    <div class="moon"></div>
+    <svg class="mts" viewBox="0 0 1080 410" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="0,410 0,250 95,175 185,245 280,150 385,235 485,165 565,250 665,160 765,235 865,180 965,250 1080,195 1080,410" fill="#33496b" opacity="0.92"/>
+      <polygon points="0,410 0,305 70,215 155,305 235,200 325,305 415,232 505,312 595,210 690,305 785,232 880,312 980,222 1080,300 1080,410" fill="#0c1a2c"/>
+    </svg>
+    <div class="layer">
+      <div class="eyebrow"><span class="sq"></span>YYC Rental Studio</div>
+      <div class="date">{{DATE}}</div>
+      <div class="mid">
+        <div
